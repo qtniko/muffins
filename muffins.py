@@ -22,7 +22,8 @@ try:
         elif simulations=="vs": null=0
         else: simulations=False
 except:
-    simulations=False
+    simulations=1
+    simulate=[amount]
 try:
     mode=INPUT[2]
     if mode=="f":
