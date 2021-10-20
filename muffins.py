@@ -1,17 +1,36 @@
 from pylab import *
+from numpy import linspace as lp
 
 # Finds amount (and 'mode')
 loopieloop=True
 while loopieloop==True:
     loopieloop=False
-    INPUT=str(input("Antall muffinsformer (f bak for fritt fall, noe annet bak for ikke fritt fall VS fritt fall): "))
+    INPUT=str(input("Antall muffinsformer, antall simulasjoner (a = alle, vs = en av hver type), modus (f = fritt fall, alt annet = ikke fritt fall): "))
     INPUT=INPUT.split(" ")
     try:
         amount=INPUT[0]
         amount=int(amount)
     except: loopieloop=True
-try: muff=INPUT[1]
-except: muff=False
+try:
+    simulations=INPUT[1]
+    try:
+        simulations=int(simulations)
+        simulate=lp(1, amount, simulations)
+    except:
+        if simulations=="a" or simulations=="all":
+            simulations=False
+        elif simulations=="vs": null=0
+        else: simulations=False
+except:
+    simulations=False
+try:
+    mode=INPUT[2]
+    if mode=="f":
+        mode=False
+    else:
+        mode=True
+except:
+    mode=True
 
 # Colors for graph (in the order they are used)
 colors=["red", "blue", "green", "yellow", "pink"]
@@ -86,16 +105,28 @@ class muffins2:
         muffin_list.append(self)
 
 # Thingamajig to make sure the correct simulations are used
-if bool(muff)==False:
-    for i in range(1, amount+1):
-        muffins(i)
-else:
-    if muff=="f":
+if bool(simulations)==False:
+    if mode==True:
+        for i in range(1, amount+1):
+            muffins(i)
+    else:
         for i in range(1, amount+1):
             muffins2(i)
-    else:
-        muffins(amount)
-        muffins2(amount)
+else:
+    try:
+        simulations=int(simulations)
+        if mode==True:
+            for i in simulate:
+                muffins(i)
+        else:
+            for i in simulate:
+                muffins2(i)
+    except:
+        if simulations=="vs":
+            muffins(amount)
+            muffins2(amount)
+        else:
+            print("Error")
 
 # Adding all the values to pyplot
 c=0
@@ -104,12 +135,12 @@ for i in muffin_list:
     c+=1
     if c==5:
         c=0
-if bool(muff)==False:
+if bool(mode)==True and simulations!="vs":
     title("noe er muffins...")
 else:
-    if muff=="f":
+    if mode==False and simulations!="vs":
         title("noe er muffins, men i fritt fall...")
-    else:
+    elif simulations=="vs":
         title("rød = med luftmotstand, blå = fritt fall")
 xlabel("$s$ (m)")
 ylabel("$v$ (m/s)")
@@ -117,14 +148,14 @@ grid()
 show()
 
 # Listing additional information about simulations
-if bool(muff)==False:
+if bool(mode)==True and simulations!="vs":
     for i in muffin_list:
         print(i.number, "stk  | ", round(i.time,3), "s  | ", round(i.tordis,3), "m  | ", round(i.terminalfart,3), "m/s")
 else:
-    if muff=="f":
+    if mode==False and simulations!="vs":
         for i in muffin_list:
             print(i.number, "stk  | ", round(i.time,3), "s")
-    else:
+    elif simulations=="vs":
         print("Med luftmotstand:")
         print(f"Antall muffinsformer: {muffin_list[0].number} stk")
         print(f"Tid: {round(muffin_list[0].time,3)} s")
@@ -134,3 +165,4 @@ else:
         print("Uten luftmotstand (fritt fall):")
         print(f"Antall muffinsformer: {muffin_list[1].number} stk")
         print(f"Tid: {round(muffin_list[1].time,3)} s")
+    else: print("Error")
