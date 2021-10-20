@@ -1,4 +1,4 @@
-from pylab import *
+from pylab import plot, title, xlabel, ylabel, grid, show
 from numpy import linspace as lp
 
 # Finds amount (and 'mode')
