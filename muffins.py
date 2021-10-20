@@ -1,4 +1,3 @@
-from numpy import *
 from pylab import *
 
 # Finds amount (and 'mode')
@@ -16,11 +15,6 @@ except: muff=False
 
 # Colors for graph (in the order they are used)
 colors=["red", "blue", "green", "yellow", "pink"]
-
-# Literally useless lmao
-m=0.00032
-g=9.81
-k=0.001
 
 # Class for simulation with force
 muffin_list=[]
